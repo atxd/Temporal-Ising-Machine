@@ -6,5 +6,5 @@ It makes many types of graphs with machine independent random number generator.
 This script downloads it and makes 100 benchmarking graph instances of order N which are uniformly ±1-weighted complete graphs.
 
 ## Usage
-You need C compiler. 
+You need C compiler. I used gitbash to run this shell command.
 You can generate graphs with `./graphgen.sh <graph_order>`, e.g. `./graphgen.sh 2000`. 
