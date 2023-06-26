@@ -1,7 +1,7 @@
 # Emplying Bayesian Optimization in Temporal Ising Machine
 An Ising spin system is simulated by creating a set of artifical spins that are characterized in a temporal basis i.e. each spin corresponds to a photovoltage for a specified time range. An intensity modulator (MZM) is used to determine the spins. The transfer functions are given by,
 ```math \label{eq: transfer equation}
-x_i[k+1] = \text{cos}^2\left(f_i[k] + \zeta_i[k] - \frac{\pi}{4}\right) - \frac{1}{2
+x_i[k+1] = \text{cos}^2\left(f_i[k] + \zeta_i[k] - \frac{\pi}{4}\right) - \frac{1}{2}
 ```
 ```math
  \label{eq: feedback term}
