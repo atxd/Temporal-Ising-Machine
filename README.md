@@ -27,13 +27,24 @@ Directions to use the graph generator are given in the README.md file in the Gra
 # Using Bay_opt.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
 ```
-python Bay_opt.py <value_of_alpha> <num_of_files_with_weights> <directory_with_graph_weights>
+python Bay_opt.py <value_of_alpha> <num_of_files> <directory_with_graph_weights>
 ```
-A new file results_bo.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename.
+Here is an example of a command that one could give
+```
+python Bay_opt.py 0.9 8 "Graph Generator\\*.rud"
+```
+A new file results_bo.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
 
 # Using Grid_Search.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
 ```
 python Grid_Search.py <alpha_value> <directory> <num_of_files>
 ```
-A new file results_gs.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename.
+Here is an example of a command that one could give
+```
+python Grid_Search.py 0.9 "Graph Generator\\*.rud" 16
+```
+A new file results_gs.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
+
+# Interpreting the results files
+Both the results files consists of data that specifies the size of the graph, the time taken by the simulation to calculate the cut value and the file that contained the weights. The results are shown in a tabular form.
