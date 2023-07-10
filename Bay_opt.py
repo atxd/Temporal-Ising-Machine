@@ -29,7 +29,7 @@ for i in range(0, len(sys.argv)-1):
 
 results_filepath = "results_bo.txt"    
 results_file = open(results_filepath, 'w')
-results_file.write("N \t Time (s) \t MAX-CUT \t Filename \n")
+results_file.write("N \t\t Time (s) \t\t MAX-CUT \t\t Filename \n")
 
 
 # Definitions of several functions
@@ -221,7 +221,7 @@ if num_of_files > 1:
         print("Cut value = ", 0.5*(sum(weights)+optimal_energy_multiple[-1][1][0]))
         print(optimal_energy_multiple[-1],"\n\n")
         
-        results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers_multiple[-1][2],2), abs(C), file_name))
+        results_file.write("{} \t\t {} \t\t {} \t\t {} \n".format(N, np.round(answers_multiple[-1][2],2), abs(C), file_name))
 
 elif num_of_files == 1:
 
@@ -251,7 +251,7 @@ elif num_of_files == 1:
     print("Do you want to plot the convergence of the energy for these optimal values for 150 iterations to obtain a potentially better value of MAX CUT? [y/n]")
     choice = input("\n")
     
-    results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers[6],2), abs(C), filename))
+    results_file.write("{} \t\t {} \t\t {} \t\t {} \n".format(N, np.round(answers[6],2), abs(C), filename))
     
     if choice == 'y':
 
