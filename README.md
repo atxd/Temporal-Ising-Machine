@@ -22,7 +22,7 @@ It can be shown that the minimum energy (the ground state energy) of this Hamilt
 The choice of the gain parameters $\alpha$ and $\beta$ is crucial since it determines the final stable value of each spin (if there is a stable configuration). Previously, a brute force approach (Grid Search algorithm) was used to find the optimal values of the gain parameters $\alpha$ and $\beta$ that ensure that the system evolves into its ground state configuration. However, in this project, an attempt has been made to employ Bayesian Optimization to search for the optimal values of the gain parameters. The corresponding improvements in the search for the optimal state have also been noticed.
 
 # Using the Graph Generator (rudy)
-Directions to use the graph generator are given in the README.md file in the Graph Generator directory.
+Directions to use the graph generator are given in the README.md file in the Graph Generator directory. Additionally, some graphs have already been generated and are present in the same directory.
 
 # Using Bay_opt.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
