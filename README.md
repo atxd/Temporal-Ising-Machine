@@ -20,3 +20,20 @@ H = \sum_{i, j} J_{i,j} \sigma_i \sigma_j
 It can be shown that the minimum energy (the ground state energy) of this Hamiltonian can be mapped to the max-cut value of a graph with $N$ nodes, where $N$ is the same as the number of spins in the Ising Hamiltonian, and the edges connecting the nodes in a graph corresponds to the interaction energies of 2 spins in the Ising Hamiltonina.
 
 The choice of the gain parameters $\alpha$ and $\beta$ is crucial since it determines the final stable value of each spin (if there is a stable configuration). Previously, a brute force approach (Grid Search algorithm) was used to find the optimal values of the gain parameters $\alpha$ and $\beta$ that ensure that the system evolves into its ground state configuration. However, in this project, an attempt has been made to employ Bayesian Optimization to search for the optimal values of the gain parameters. The corresponding improvements in the search for the optimal state have also been noticed.
+
+# Using the Graph Generator (rudy)
+Directions to use the graph generator are given in the README.md file in the Graph Generator directory.
+
+# Using Bay_opt.py
+Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
+```
+python bay_opt.py <value_of_alpha> <num_of_files_with_weights> <directory_with_graph_weights>
+```
+A new file results_bo.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename.
+
+# Using Grid_Search.py
+Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
+```
+python Grid_Search.py <alpha_value> <directory> <num_of_files>
+```
+A new file results_gs.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename.
