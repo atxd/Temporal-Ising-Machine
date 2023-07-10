@@ -90,11 +90,15 @@ def assign_weights(filename, density=50):
     return weights, N
 
 
+# Mapping the command line arguments to the respective variables
+for i in range(0, len(sys.argv)-1):
+    if sys.argv[i]=='ALPHA':
+        alpha = float(sys.argv[i+1])
+    elif sys.argv[i]=='NUM_OF_FILES':
+        num_of_files = int(sys.argv[i+1])
+    elif sys.argv[i]=='DIRECTORY':
+        directory = sys.argv[i+1]
 
-
-directory = sys.argv[2]
-alpha = float(sys.argv[1])
-num_of_files = int(sys.argv[3])
 
 start = time.time()
 file_paths = glob.glob(directory)

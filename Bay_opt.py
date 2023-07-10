@@ -18,10 +18,15 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Mapping the command line arguments to variables
-alpha = float(sys.argv[1])
-num_of_files = int(sys.argv[2])
-directory = sys.argv[3]                                               # ensure that directory includes *.rud in the end
+for i in range(0, len(sys.argv)-1):
+    if sys.argv[i]=='ALPHA':
+        alpha = float(sys.argv[i+1])
+    elif sys.argv[i]=='NUM_OF_FILES':
+        num_of_files = int(sys.argv[i+1])
+    elif sys.argv[i]=='DIRECTORY':
+        directory = sys.argv[i+1]                                   # ensure that directory includes *.rud in the end
     
+
 results_filepath = "results_bo.txt"    
 results_file = open(results_filepath, 'w')
 results_file.write("N \t Time (s) \t MAX-CUT \t Filename \n")
@@ -217,8 +222,6 @@ if num_of_files > 1:
         print(optimal_energy_multiple[-1],"\n\n")
         
         results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers_multiple[-1][2],2), abs(C), file_name))
-        
-results_file.close()
 
 elif num_of_files == 1:
 
