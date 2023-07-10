@@ -22,6 +22,10 @@ alpha = float(sys.argv[1])
 num_of_files = int(sys.argv[2])
 directory = sys.argv[3]                                               # ensure that directory includes *.rud in the end
     
+results_filepath = "results_bo.txt"    
+results_file = open(results_filepath, 'w')
+results_file.write("N \t Time (s) \t MAX-CUT \t Filename \n")
+
 
 # Definitions of several functions
 
@@ -192,23 +196,25 @@ if num_of_files > 1:
     i = 0
     noise = 0.01
 
-    for file_name in file_paths:
-
+    for i in range(num_of_files):
+        
+        file_name = file_paths[i]
         weights, N, E_init = initialize_weights_variables(file_name)
         Tmax = 50
         print("N = ", N)
         answers_multiple.append(bay_opt(alpha=alpha, optimal_energy=[[], [], []], N=N, Tmax=Tmax, E_init=E_init, 
-                             noise=noise, num=8, n_calls=1, plot_graph=0))
+                             noise=noise, num=8, n_calls=2, plot_graph=0))
 
         optimal_energy_multiple.append(answers_multiple[-1][0])
-        beta_g.append(optimal_energy_multiple[-1][0][0])
-        alpha_g.append(optimal_energy_multiple[-1][2][0])
+        beta_g_multiple.append(optimal_energy_multiple[-1][0][0])
+        alpha_g_multiple.append(optimal_energy_multiple[-1][2][0])
+        C = 0.5*(sum(weights)+optimal_energy_multiple[-1][1][0])
 
         print("Time taken = ", answers_multiple[-1][2])
         print("Cut value = ", 0.5*(sum(weights)+optimal_energy_multiple[-1][1][0]))
         print(optimal_energy_multiple[-1],"\n\n")
-
-        i += 1
+        
+        results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers_multiple[-1][2],2), abs(C), file_name))
 
 elif num_of_files == 1:
 
@@ -231,22 +237,32 @@ elif num_of_files == 1:
     optimal_energy = answers[0]
     print("Optimal value is obtained when alpha = {}, beta = {}".format(
         optimal_energy[2][0], optimal_energy[0][0]))
-
-    print("\n\n Plotting the convergence plot for the optimal values of alpha and beta for 150 iterations \n\n ")
-    
-    alpha_g = answers[0][2][0]
-    beta_g = answers[0][0][0]
-
-    y = energy(150, N, alpha_g, beta_g, 1)
-    plt.title("Convergence of energy. N = {}, Density = {}".format(N, 50))
-    plt.plot(y)
-    plt.ylabel("Energy")
-    plt.xlabel("Number of iterations")
-    plt.show()
-    print("alpha={}, beta={}".format(alpha_g, beta_g))
-
-
+    print("Time taken to find the optimal gains is {}s".format(answers[6]))
     C = 0.5*(sum(weights)+optimal_energy[1][0])
     print("\n\n Max cut value after ", Tmax ," iterations = ", C)
-    C = 0.5*(min(y)+sum(weights))
-    print("\n\n Max cut value after 150 iterations = ", C)
+
+    print("Do you want to plot the convergence of the energy for these optimal values for 150 iterations to obtain a potentially better value of MAX CUT? [y/n]")
+    choice = input("\n")
+    
+    results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers[6],2), abs(C), filename))
+    
+    if choice == 'y':
+
+        print("\n\n Plotting the convergence plot for the optimal values of alpha and beta for 150 iterations \n\n ")
+
+        alpha_g = answers[0][2][0]
+        beta_g = answers[0][0][0]
+
+        y = energy(150, N, alpha_g, beta_g, 1)
+        plt.title("Convergence of energy. N = {}, Density = {}".format(N, 50))
+        plt.plot(y)
+        plt.ylabel("Energy")
+        plt.xlabel("Number of iterations")
+        plt.show()
+        print("alpha={}, beta={}".format(alpha_g, beta_g))
+
+
+        C = 0.5*(sum(weights)+optimal_energy[1][0])
+        print("\n\n Max cut value after ", Tmax ," iterations = ", C)
+        C = 0.5*(min(y)+sum(weights))
+        print("\n\n Max cut value after 150 iterations = ", C)
