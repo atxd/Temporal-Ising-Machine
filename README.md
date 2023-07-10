@@ -27,7 +27,7 @@ Directions to use the graph generator are given in the README.md file in the Gra
 # Using Bay_opt.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
 ```
-python bay_opt.py <value_of_alpha> <num_of_files_with_weights> <directory_with_graph_weights>
+python Bay_opt.py <value_of_alpha> <num_of_files_with_weights> <directory_with_graph_weights>
 ```
 A new file results_bo.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename.
 
