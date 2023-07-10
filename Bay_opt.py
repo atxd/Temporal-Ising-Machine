@@ -145,6 +145,8 @@ def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num
     # n_calls = int((9*N*(1-alpha)/(abs(sum(weights))))/0.003) - 2
     n_calls = n_calls
 
+    length_scale = 10**np.log10(np.round(beta_min*10, 2))
+
     n52 = ConstantKernel(1.0) * Matern(length_scale=length_scale, length_scale_bounds=(1e-10, 10), nu=2.5)
     gpr = GaussianProcessRegressor(kernel=n52, alpha=noise)
 
@@ -152,7 +154,7 @@ def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num
                     bounds.tolist(),
                     base_estimator=gpr, 
                     acq_func='EI',      # expected improvement
-                    xi=0.1,             # exploitation-exploration trade-off
+                    xi=0.01,             # exploitation-exploration trade-off
                     n_calls=n_calls,    # number of iterations
                     n_random_starts=0,  # initial samples are provided thus n_random_starts=0
                     x0=X_init.tolist(), # initial samples

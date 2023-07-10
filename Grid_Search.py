@@ -113,7 +113,7 @@ for i in range(num_of_files):
     values = []
     beta_min = N*(1-alpha)/(abs(sum(weights)))
     beta_max = 9*beta_min
-    beta_space = np.linspace(beta_min, beta_max, 4)
+    beta_space = np.linspace(beta_min, beta_max, 5)
 
     start = time.time()
     for j in beta_space:
