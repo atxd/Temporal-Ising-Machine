@@ -217,6 +217,8 @@ if num_of_files > 1:
         print(optimal_energy_multiple[-1],"\n\n")
         
         results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(answers_multiple[-1][2],2), abs(C), file_name))
+        
+results_file.close()
 
 elif num_of_files == 1:
 
@@ -268,3 +270,5 @@ elif num_of_files == 1:
         print("\n\n Max cut value after ", Tmax ," iterations = ", C)
         C = 0.5*(min(y)+sum(weights))
         print("\n\n Max cut value after 150 iterations = ", C)
+
+results_file.close()

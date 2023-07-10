@@ -125,3 +125,5 @@ for i in range(num_of_files):
     print("The best value of Cut is ", C)
 
     results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(end-start,2), abs(C), filename))
+    
+results_file.close()
