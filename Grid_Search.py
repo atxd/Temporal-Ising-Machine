@@ -104,7 +104,7 @@ start = time.time()
 file_paths = glob.glob(directory)
 results_filepath = "results_gs.txt"
 results_file = open(results_filepath, 'w')
-results_file.write("N \t Time (s) \t MAX-CUT \t Filename \n")
+results_file.write("N \t\t Time (s) \t\t MAX-CUT \t\t Filename \n")
 
 for i in range(num_of_files):
     filename = file_paths[i]
@@ -128,6 +128,6 @@ for i in range(num_of_files):
     C = 0.5*(min(values) + sum(weights))
     print("The best value of Cut is ", C)
 
-    results_file.write("{} \t {} \t {} \t {} \n".format(N, np.round(end-start,2), abs(C), filename))
+    results_file.write("{} \t\t {} \t\t {} \t\t {} \n".format(N, np.round(end-start,2), abs(C), filename))
     
 results_file.close()
