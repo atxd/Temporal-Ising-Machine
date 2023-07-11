@@ -1,4 +1,4 @@
-# Emplying Bayesian Optimization in Temporal Ising Machine
+# Employing Bayesian Optimization in Temporal Ising Machine
 An Ising spin system is simulated by creating a set of artifical spins that are characterized in a temporal basis i.e. each spin corresponds to a photovoltage for a specified time range. An intensity modulator (MZM) is used to determine the spins. The transfer functions are given by,
 
 ```math
