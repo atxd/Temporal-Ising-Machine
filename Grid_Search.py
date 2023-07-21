@@ -91,6 +91,15 @@ def assign_weights(filename, density=50):
 
 
 # Mapping the command line arguments to the respective variables
+
+if len(sys.argv) < 9:
+    print("Lesser arguments than required, please provide all the required arguments.")
+    sys.exit()
+elif len(sys.argv) > 9:
+    print("Too many arguments, please recheck the command entered.")
+    sys.exit()
+
+    
 for i in range(0, len(sys.argv)-1):
     if sys.argv[i]=='ALPHA':
         alpha = float(sys.argv[i+1])
@@ -98,26 +107,31 @@ for i in range(0, len(sys.argv)-1):
         num_of_files = int(sys.argv[i+1])
     elif sys.argv[i]=='DIRECTORY':
         directory = sys.argv[i+1]
+    elif sys.argv[i]=='DENSITY':
+        density = float(sys.argv[i+1])
 
 
-start = time.time()
+n_calls = 5
+
+
 file_paths = glob.glob(directory)
-results_filepath = "results_gs.txt"
+results_filepath = "results_gs_" + "_density_" + str(density) + ".txt"
 results_file = open(results_filepath, 'w')
 results_file.write("N \t\t Time (s) \t\t MAX-CUT \t\t Filename \n")
 
 for i in range(num_of_files):
+    start1 = time.time()
     filename = file_paths[i]
-    weights, N = assign_weights(filename, density=50)
+    weights, N = assign_weights(filename, density=density)
     Tmax = 50
-    end = time.time()
+    end1 = time.time()
     print("N = {}".format(N))
-    print("time taken for defining the system = ", end-start, "s")
+    print("time taken for defining the system = ", end1-start1, "s")
 
     values = []
     beta_min = N*(1-alpha)/(abs(sum(weights)))
     beta_max = 9*beta_min
-    beta_space = np.linspace(beta_min, beta_max, 5)
+    beta_space = np.linspace(beta_min, beta_max, n_calls)
 
     start = time.time()
     for j in beta_space:
