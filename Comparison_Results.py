@@ -4,13 +4,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-bo_filename = "results_bo_density_50.0.txt"
-gs_filename = "results_gs_density_50.0.txt"
+density=float(50)
+
+bo_filename = "results_bo_density_" + str(density) + ".txt"
+gs_filename = "results_gs_density_" + str(density) + ".txt"
 
 bo_nodes = []
 bo_times = []
 bo_cuts = []
-#bo_fit = []
 
 with open(bo_filename, 'r') as bo_file:
     for line in bo_file:
@@ -19,7 +20,6 @@ with open(bo_filename, 'r') as bo_file:
             bo_nodes.append(int(words[0]))
             bo_times.append(float(words[1]))
             bo_cuts.append(float(words[2]))
-            #bo_fit.append(0.0003*bo_nodes[-1]**2+0.025*bo_nodes[-1])
 
 gs_nodes = []
 gs_times = []
@@ -74,7 +74,7 @@ while(i < len(gs_nodes) and i not in i_mismatch):
 
 
 
-comparison_filename = "comparison_density_50.0.txt"
+comparison_filename = "comparison_density_" + str(density) + ".txt"
 comparison_file = open(comparison_filename, 'w')
 
 comparison_file.write("Nodes \t\t Time \t\t CutValue \n")
