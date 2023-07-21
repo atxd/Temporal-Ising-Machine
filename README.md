@@ -33,7 +33,7 @@ There is no constraint on the order of the arguments, only that the parameter an
 ```
 python Bay_opt.py ALPHA 0.9 NUM_OF_FILES 8 DENSITY 50 DIRECTORY "Graph Generator\\*.rud"
 ```
-A new file results_bo_density_<density_of_edges>.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
+A new file results_bo_density_<density_of_edges>.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, all the weights are either 0 or -1. The choice of nodes whose edges are connected is random and the edges are undirected.
 
 # Using Grid_Search.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
