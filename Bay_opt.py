@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # command line arguments are as follows:
-# python bay_opt.py <value_of_alpha> <num_of_files_with_weights> <directory_with_graph_weights>
+# python Bay_opt.py ALPHA <value_of_alpha> NUM_OF_FILES <num_of_files_with_weights> DIRECTORY <directory_with_graph_weights> DENSITY <density>
 
 # Importling the relevant libraries
 
@@ -18,6 +18,19 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Mapping the command line arguments to variables
+
+if len(sys.argv) < 9:
+    print("Lesser arguments than required, please provide all the required arguments.")
+    sys.exit()
+elif len(sys.argv) > 9:
+    print("Too many arguments, please recheck the command entered.")
+    sys.exit()
+
+
+ALPHA = None
+DIRECTORY = None
+NUM_OF_FILES = None
+
 for i in range(0, len(sys.argv)-1):
     if sys.argv[i]=='ALPHA':
         alpha = float(sys.argv[i+1])
@@ -25,11 +38,18 @@ for i in range(0, len(sys.argv)-1):
         num_of_files = int(sys.argv[i+1])
     elif sys.argv[i]=='DIRECTORY':
         directory = sys.argv[i+1]                                   # ensure that directory includes *.rud in the end
-    
+    elif sys.argv[i]=='DENSITY':
+        density=float(sys.argv[i+1])
 
-results_filepath = "results_bo.txt"    
+#if ALPHA==None or DIRECTORY==None or NUM_OF_FILES==None: 
+ #   print("Wrong command entered, please enter the correct command line arguments.\nExiting\n")
+  #  sys.exit()
+    
+n_calls = 2
+
+results_filepath = "results_bo_" + "_density_" + str(density) + ".txt"    
 results_file = open(results_filepath, 'w')
-results_file.write("N \t\t Time (s) \t\t MAX-CUT \t\t Filename \n")
+results_file.write("Nodes \t\t Time (s) \t\t MAX-CUT \t\t Filename \n")
 
 
 # Definitions of several functions
@@ -78,7 +98,7 @@ def energy(Tmax, N, alpha, beta, array=0):
                 E[k] += J[i, j]*np.sign(x[i, k])*np.sign(x[j, k])
     if array == 0:
         return -E[-1]
-    if array == 1:                                                   #array is needed if visualization of convergence is needed
+    if array == 1:                                                   #array is needed if visualization of convergence is needed (to plot)
         return -E
 
     
@@ -88,35 +108,47 @@ def plot_approximation(gpr, X, X_sample, Y_sample, show_legend=False):
     plt.fill_between(X.ravel(), 
                      mu.ravel() + 1.96 * std, 
                      mu.ravel() - 1.96 * std, 
-                     alpha=0.1) 
+                     alpha=0.1, label='Uncertainty') 
     plt.plot(X, mu, 'b-', lw=1, label='Surrogate function')
     plt.plot(X_sample, Y_sample, 'kx', mew=3, label='samples')
     
     if show_legend:
         plt.legend()
         
-def initialize_weights_variables(filename, density=50, min_weight=1, max_weight=10):
+def initialize_weights_variables(filename, density=density, min_weight=1, max_weight=1):
     global weights
     weights = []
 
     if density != 50:
         for i in range(len(weights)):
             if np.random.randint(0,100) >= density:
-                weights[i] = 0
+                weights.append(0)
             else:
-                weights[i] = -np.random.randint(min_weights, max_weights)
-    else:
-
-        with open(filename, 'r') as file:
-            for line in file:
-                words = line.split()
-                if len(words) == 3:
-                    weight = int(words[2])
-                    weights.append((weight-1)/2)
+                if min_weight == max_weight:
+                    weights.append(0)
+                else:
+                    weights[i] = -np.random.randint(min_weights, max_weights)
+    
+    with open(filename, 'r') as file:
+        for line in file:
+            words = line.split()
+            if len(words) == 3:
+                weight = int(words[2])
+                weights.append((weight-1)/2)
 
         file.close()
+        
+    if density != 50:
+        for i in range(len(weights)):
+            if np.random.randint(0,100) >= density:
+                weights[i] = 0
+            else:
+                if min_weight == max_weight:
+                    weights[i] = -1
+                else:
+                    weights[i] = -np.random.randint(min_weights, max_weights)
 
-    print("density is ", abs(100*sum(weights)/len(weights)), '%')
+    print("Actual density is ", abs(100*sum(weights)/len(weights)), '%')
 
     E_init = np.zeros(2).reshape(-1, 1)
 
@@ -130,7 +162,7 @@ def initialize_weights_variables(filename, density=50, min_weight=1, max_weight=
 
 # Bayesian Optimization function to find the optimal values of $\alpha$ and $\beta$ that achieve the ground state configuration.
 
-def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num=10, plot_graph=1,n_calls=4,
+def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num=10, plot_graph=1, n_calls=n_calls,	#n_calls is defined as a global variable
            length_scale=0.1):
     start = time.time()
     beta_min = N*(1-alpha)/(abs(sum(weights)))
@@ -142,7 +174,7 @@ def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num
 
     bounds = np.array([[beta_min, beta_max]])
 
-    X_init = np.array([[beta_min], [beta_max]])
+    X_init = np.array([[beta_min], [beta_max]])				# Evaluations made at the boundary of the parameter space
     E_init[0] = energy(Tmax, N, alpha, X_init[0])
     E_init[1] = energy(Tmax, N, alpha, X_init[1])
 
@@ -150,7 +182,7 @@ def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num
     # n_calls = int((9*N*(1-alpha)/(abs(sum(weights))))/0.003) - 2
     n_calls = n_calls
 
-    length_scale = 10**np.log10(np.round(beta_min*10, 2))
+    length_scale = 10**np.log10(np.round(beta_min*10, 2))		# Using an adaptive length scale
 
     n52 = ConstantKernel(1.0) * Matern(length_scale=length_scale, length_scale_bounds=(1e-10, 10), nu=2.5)
     gpr = GaussianProcessRegressor(kernel=n52, alpha=noise)
@@ -159,7 +191,7 @@ def bay_opt(alpha, optimal_energy, N, Tmax, E_init, noise=0.005, beta_max=0, num
                     bounds.tolist(),
                     base_estimator=gpr, 
                     acq_func='EI',      # expected improvement
-                    xi=0.01,             # exploitation-exploration trade-off
+                    xi=0.01,            # exploitation-exploration trade-off
                     n_calls=n_calls,    # number of iterations
                     n_random_starts=0,  # initial samples are provided thus n_random_starts=0
                     x0=X_init.tolist(), # initial samples
@@ -210,14 +242,14 @@ if num_of_files > 1:
         Tmax = 50
         print("N = ", N)
         answers_multiple.append(bay_opt(alpha=alpha, optimal_energy=[[], [], []], N=N, Tmax=Tmax, E_init=E_init, 
-                             noise=noise, num=8, n_calls=2, plot_graph=0))
+                             noise=noise, num=8, n_calls=n_calls, plot_graph=0))
 
         optimal_energy_multiple.append(answers_multiple[-1][0])
         beta_g_multiple.append(optimal_energy_multiple[-1][0][0])
         alpha_g_multiple.append(optimal_energy_multiple[-1][2][0])
         C = 0.5*(sum(weights)+optimal_energy_multiple[-1][1][0])
 
-        print("Time taken = ", answers_multiple[-1][2])
+        print("\nTime taken = ", answers_multiple[-1][2])
         print("Cut value = ", 0.5*(sum(weights)+optimal_energy_multiple[-1][1][0]))
         print(optimal_energy_multiple[-1],"\n\n")
         
@@ -229,16 +261,15 @@ elif num_of_files == 1:
 
     start = time.time()
     filename = directory
-    weights, N, E_init = initialize_weights_variables(filename, density=50)
+    weights, N, E_init = initialize_weights_variables(filename, density=density)
     Tmax = 50
     end = time.time()
-    print("time taken for defining the system = ", end-start, "s")
+    print("\nTime taken for defining the system = ", end-start, "s")
 
 
     answers = bay_opt(alpha=alpha, optimal_energy=[[], [], []], N=N, 
-                        Tmax=Tmax, E_init=E_init, 
-                        #beta_max=5*N*(1-alpha)/(abs(sum(weights))),
-                        num=8, n_calls=1, plot_graph=0)
+                        Tmax=Tmax, E_init=E_init,
+                        num=8, n_calls=n_calls, plot_graph=0)
 
 
     optimal_energy = answers[0]
