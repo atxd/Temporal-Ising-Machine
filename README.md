@@ -27,24 +27,24 @@ Directions to use the graph generator are given in the README.md file in the Gra
 # Using Bay_opt.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
 ```
-python Bay_opt.py ALPHA <value_of_alpha> NUM_OF_FILES <num_of_files> DIRECTORY <directory_with_graph_weights>
+python Bay_opt.py ALPHA <value_of_alpha> NUM_OF_FILES <num_of_files> DIRECTORY <directory_with_graph_weights> DENSITY <density_of_edges>
 ```
-Here is an example of a command that one could give
+There is no constraint on the order of the arguments, only that the parameter and its value be adjacent entries. Here is an example of a command that one could give
 ```
-python Bay_opt.py ALPHA 0.9 NUM_OF_FILES 8 DIRECTORY "Graph Generator\\*.rud"
+python Bay_opt.py ALPHA 0.9 NUM_OF_FILES 8 DENSITY 50 DIRECTORY "Graph Generator\\*.rud"
 ```
-A new file results_bo.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
+A new file results_bo_density_<density_of_edges>.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
 
 # Using Grid_Search.py
 Run the following commands on the terminal and specify the actual values of the arguments wherever necessary.
 ```
-python Grid_Search.py ALPHA <alpha_value> DIRECTORY <directory> NUM_OF_FILES <num_of_files>
+python Grid_Search.py ALPHA <alpha_value> DIRECTORY <directory> NUM_OF_FILES <num_of_files> DENSITY <density_of_edges>
 ```
-Here is an example of a command that one could give
+There is no constraint on the order of the arguments, only that the parameter and its value be adjacent entries. Here is an example of a command that one could give
 ```
-python Grid_Search.py ALPHA 0.9 DIRECTORY "Graph Generator\\*.rud" NUM_OF_FILES 16
+python Grid_Search.py DENSITY 50 ALPHA 0.9 DIRECTORY "Graph Generator\\*.rud" NUM_OF_FILES 16
 ```
-A new file results_gs.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
+A new file results_gs_density_<density_of_edges>.txt will be created which will save the results (Number of Nodes (N), Time taken to find the solution (T), MAX-CUT value and filename. By default, the weights used will have 50% density and all the weights are either 0 or -1. The choice of nodes whose edges are connected is random.
 
 # Interpreting the results files
-Both the results files consists of data that specifies the size of the graph, the time taken by the simulation to calculate the cut value and the file that contained the weights. The results are shown in a tabular form.
+Both the results files consists of data that specifies the size of the graph, the time taken by the simulation to calculate the cut value and the file that contained the weights. The results are shown in a tabular form. Additionally, the "Comparison_Results.py" file can be run to get one table that provides a ratio of the times and cut values obtained using Bayesian Optimization wrt Grid Search. There are no command line arguments required to run this Python file. The comparison results are stored in a text file named "comparison_density_<density_of_edges>.txt"
